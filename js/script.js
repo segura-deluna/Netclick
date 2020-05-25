@@ -5,16 +5,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
 	hamburger.addEventListener('click', () => {
-
 		leftMenu.classList.toggle('openMenu');
 		hamburger.classList.toggle('open');
-
 	});
 
 	document.addEventListener('click', event => {
 
 		if (!event.target.closest('.left-menu')) {
-
 			leftMenu.classList.remove('openMenu');
 			hamburger.classList.remove('open');
 		}
