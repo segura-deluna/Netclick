@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', (event) => {
 
 	const IMG_URL = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2';
+	const API_KEY = '13f739a99c95d2f5a7c72922facb9534';
 
 	const leftMenu = document.querySelector('.left-menu'),
 		hamburger = document.querySelector('.hamburger'),
