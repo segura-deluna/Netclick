@@ -16,7 +16,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		description = document.querySelector('.description'),
 		modalLink = document.querySelector('.modal__link'),
 		searchForm = document.querySelector('.search__form'),
-		searchFormInput = document.querySelector('.search__form-input');
+		searchFormInput = document.querySelector('.search__form-input'),
+		preloader = document.querySelector('.preloader');
 
 	const loading = document.createElement('div');
 	loading.className = 'loading';
@@ -156,6 +157,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		const card = target.closest('.tv-card');
 
 		if (card) {
+
+			preloader.style.display = 'block';
+
 			new DBService().getTvShow(card.id)
 				.then(data => {
 					tvCardImg.src = IMG_URL + data.poster_path;
@@ -178,6 +182,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 				.then(() => {
 					document.body.style.overflow = 'hidden';
 					modal.classList.remove('hide');
+				})
+				.finally(() => {
+					preloader.style.display = 'none';
 				});
 
 			document.body.style.overflow = 'hidden';
