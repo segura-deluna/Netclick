@@ -422,6 +422,7 @@ main {
     padding-top: 7px;
     padding-bottom: 7px;
     border-bottom: 2px solid #ccc;
+    margin-bottom: 20px;
 }
 
 .search__form-head {
@@ -435,6 +436,7 @@ main {
     border-style: none;
     outline: none;
     background-color: transparent;
+    color: #2d2d2d;
 }
 
 .search__form-input:focus {
@@ -442,7 +444,8 @@ main {
 }
 
 .tv-shows__head {
-    margin: 15px 0;
+    margin: 15px auto;
+    text-align: center;
 }
 
 .tv-shows__list {
@@ -522,11 +525,11 @@ main {
     width: 100vw;
     height: 100vh;
     z-index: 990;
-    background-color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .modal__content {
-    border: 32px solid #00addc;
+    border: 5px solid #00addc;
     position: relative;
     min-width: 600px;
     max-width: 800px;
@@ -593,8 +596,8 @@ main {
 
 .cross {
     position: absolute;
-    top: -75px;
-    right: -75px;
+    top: -30px;
+    right: -30px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
