@@ -21,13 +21,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		dropdown = document.querySelectorAll('.dropdown'),
 		tvShowsHead = document.querySelector('.tv-shows__head'),
 		posterWrapper = document.querySelector('.poster__wrapper'),
-		modalContent = document.querySelector('.modal__content');
+		modalContent = document.querySelector('.modal__content'),
+		pagination = document.querySelector('.pagination');
 
 	const loading = document.createElement('div');
 	loading.className = 'loading';
 
 
 	const DBService = class {
+
 		getData = async (url) => {
 			const res = await fetch(url);
 			if (res.ok) {
@@ -46,8 +48,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		}
 
 		getSearchResult = query => {
-			return this.getData(SERVER + '/search/tv?api_key=' + API_KEY +
-				'&page=1&include_adult=true&query=' + query);
+			this.temp = `${SERVER}/search/tv?api_key=${API_KEY}&page=1&include_adult=true&query=${query}`;
+			return this.getData(this.temp);
+		}
+
+		getNextPage = page => {
+			return this.getData(this.temp + '&page=' + page);
 		}
 
 		getTvShow = id => {
@@ -70,7 +76,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 	// * Render Cards =========================================================
 
-	const renderCard = responce => {
+	const renderCard = (responce, target) => {
 		tvShowList.textContent = '';
 
 		if (!responce.total_results) {
@@ -80,7 +86,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			return;
 		}
 
-		tvShowsHead.textContent = 'Результат поиска:';
+		tvShowsHead.textContent = target ? target.textContent : 'Результат поиска:';
 		tvShowsHead.style.cssText = 'color: #2d2d2d; font-size: 20px;';
 
 		responce.results.forEach((item) => {
@@ -113,6 +119,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			loading.remove();
 			tvShowList.append(card);
 		});
+
+		pagination.textContent = '';
+
+		if (!target && responce.total_pages > 1) {
+			for (let i = 1; i <= responce.total_pages; i++) {
+				pagination.innerHTML += `<li><a href="#" class="pages">${i}</a></li>`;
+			}
+		}
 	};
 
 
@@ -165,16 +179,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		}
 
 		if (target.closest('#top-rated')) {
-			dbService.getTopRated().then(renderCard);
+			dbService.getTopRated().then((responce) => renderCard(responce, target));
 		}
 		if (target.closest('#popular')) {
-			dbService.getPopular().then(renderCard);
+			dbService.getPopular().then((responce) => renderCard(responce, target));
 		}
 		if (target.closest('#week')) {
-			dbService.getWeek().then(renderCard);
+			dbService.getWeek().then((responce) => renderCard(responce, target));
 		}
 		if (target.closest('#today')) {
-			dbService.getToday().then(renderCard);
+			dbService.getToday().then((responce) => renderCard(responce, target));
+		}
+
+		if (target.closest('#search')) {
+			tvShowList.textContent = '';
+			tvShowsHead.textContent = '';
+			pagination.textContent = '';
 		}
 	});
 
@@ -194,6 +214,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 	tvShowList.addEventListener('mouseover', changeImage);
 	tvShowList.addEventListener('mouseout', changeImage);
+
+	pagination.addEventListener('click', event => {
+		event.preventDefault();
+		const target = event.target;
+
+		if (target.classList.contains('pages')) {
+			tvShows.append(loading);
+			dbService.getNextPage(target.textContent).then(renderCard);
+		}
+	});
+
+
 
 
 	// * Open modal ===============================================================
@@ -272,11 +304,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			modal.classList.add('hide');
 		}
 	});
-
-
-
-
-
 
 
 });

@@ -1171,3 +1171,16 @@ div:after {
         background-color: #00838f;
     }
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination li {
+    margin: 0 5px 20px;
+}
+
+.pagination li a {
+    padding: 0 5px;
+}
